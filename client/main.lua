@@ -355,9 +355,23 @@ function GetAction(data)
 						end
 					end
 				else
-					for l,w in pairs(v) do
-						if l ~= 'label' and l ~= 'parent' then
-							table.insert(elements, {label = w, value = l})
+					for v_value,v_label in pairs(v) do
+						if v_value ~= 'label' and v_value ~= 'parent' then
+							local modType = Config.Menus[v_value].modType
+							if data.value == "cosmetics" and modType then
+								if modType == "neonColor" or modType == "windowTint" or modType == "plateIndex" or modType == 22 then
+									table.insert(elements, {label = v_label, value = v_value})
+								else
+									local modCount = GetNumVehicleMods(vehicle, modType)
+									if modCount < 2 then
+										print("[esx_lscustom] No custom mods for " .. v_label)
+									else
+										table.insert(elements, {label = v_label, value = v_value})
+									end
+								end
+							else
+								table.insert(elements, {label = v_label, value = v_value})
+							end
 						end
 					end
 				end
